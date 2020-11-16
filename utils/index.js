@@ -1,50 +1,8 @@
+
+const color = ['#024280','#d2f8c8','#ffbfc1','#ffe3ba','#ffd3ff','#c1dbff']
 export const chartOption = (datas) => {
-  var firstLineData = [90, 50, 39, 50, 120, 85, '_'];
-  var firstLineDottedData = ['_', '_', '_', '_', '_', 85, 100];
-
-  var sendLineData = [70, 50, 50, 87, 90, 42, '_'];
-  var sendLineDottedData = ['_', '_', '_', '_', '_', 42, 65];
-
-  var threeLineData = [220, 182, 191, 234, 290, 78, '_'];
-  var threeLineDottedData = ['_', '_', '_', '_', '_', 78, 180];
   const { maxValue, yAxis, data } = datas
 
-  var lineitemStyle2 = {
-    normal: {
-      label: {
-        formatter: function (params) {
-          return maxValue - params.value;
-        },
-        fontSize: 40,
-        padding: [90, 0, 0, 0],
-        color: '#000',
-        textStyle: {
-          baseline: 'top'
-        }
-      },
-      color: '#66ff00',
-      borderColor: 'rgba(102, 255, 0, 0.5)',
-      borderWidth: 10
-    }
-  };
-  var lineitemStyle1 = {
-    normal: {
-      label: {
-        formatter: function (params) {
-          return maxValue - params.value;
-        },
-        fontSize: 40,
-        padding: [90, 0, 0, 0],
-        color: '#000',
-        textStyle: {
-          baseline: 'top'
-        }
-      },
-      color: '#ffea00',
-      borderColor: 'rgba(255, 234, 0, 0.5)',
-      borderWidth: 10
-    }
-  };
   var lineitemStyle = {
     normal: {
       label: {
@@ -52,33 +10,58 @@ export const chartOption = (datas) => {
           return maxValue - params.value;
         },
         fontSize: 40,
-        padding: [90, 0, 0, 0],
-        color: '#',
-        textStyle: {
-          baseline: 'top'
-        }
+        // padding: [90, 0, 0, 0],
       },
-      color: '#01f2ee',
-      borderColor: 'rgba(1, 242, 238, 0.5)',
       borderWidth: 10
     }
   };
 
   let series = []
   data.map((item, i) => {
-    console.log(item.value.concat('_'))
+    const num = item.value.length - 1
+    const split = maxValue / (data.length + 1)
+    const xPos = split * (i + 1)
     series.push({
       name: item.name,
       type: 'line',
       symbolSize: 5,
       symbol: 'emptyCircle',
       itemStyle: lineitemStyle,
+      markPoint:{
+        data:[{
+          symbol:item.icon,
+          symbolSize:'50',
+          value:item.name,
+          symbolOffset:[0,'-35%'],
+          symbolKeepAspect:true,
+          coord:[xPos,yAxis[0].length],
+          label:{
+              position: "top",
+              fontSize:18,
+              color:'#000',
+              formatter(data){
+                  return data.value;
+              }
+          },
+        }],
+      },
+      markLine:{
+        symbol: 'none', //去掉箭头
+        label:{
+          show:false,
+        },
+        lineStyle:{
+          color:'#cacaca',
+          type:'solid'
+        },
+        data: item.value.map((n,i)=>({
+            yAxis: i
+        }))
+      },
       data: item.value.concat('_')
     }, {
       name: item.name,
       type: 'line',
-      symbolSize: 20,
-      symbol: 'image://data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7',
       itemStyle: lineitemStyle,
       showAllSymbol: false,
       lineStyle: {
@@ -86,47 +69,38 @@ export const chartOption = (datas) => {
           type: 'dotted'
         }
       },
-      // tooltip: {
-      //   formatter: '{b0},{a0}: {c0}<br />{b2}'
-      // },
       data: (() => {
-        const num = item.value.length - 2
-        const split = maxValue / item.value.length + 1
-        return new Array(num + 1).fill('_').concat([item.value[num + 1], split * i + 1])
+        return new Array(num).fill('_').concat([item.value[num], xPos])
       })()
     })
   })
   const yAxisData = yAxis.map((item, i) => {
     return {
       type: 'category',
+      boundaryGap:true,
       axisTick: {
-        lineStyle: {
-          // color: i === 0 ? 'red' : 'green',
-          // shadowOffsetY: i === 0 ? 10 : 0
-        }
+        show:true,
+        alignWithLabel:true
       },
+      //两侧线条
       axisLine: {
         lineStyle: {
-          color: '#c3c3c3'
+          color: '#cacaca'
         },
-        onZero: false
       },
       axisLabel: {
-        fontSize: 14,
+        margin:28,
+        fontSize: 16,
         color: '#000'
       },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: '#c3c3c3',
-        }
+      minorTick:{
+        show:true,
       },
-      data: item.concat(['', '']),
-      // scale: true
+      data: item.concat(['']),
     }
   })
   let option = {
-    // backgroundColor: '#293042',
+    color,
     tooltip: {
       show: true,
       trigger: 'item'
@@ -140,15 +114,11 @@ export const chartOption = (datas) => {
     },
     xAxis: {
       type: 'value',
-      // boundaryGap: true,
       axisTick: {
         show: false,
       },
       axisLine: {
-        lineStyle: {
-          color: '#c3c3c3'
-        },
-        // onZero: true
+        show:false,
       },
       axisLabel: {
         show: false,
