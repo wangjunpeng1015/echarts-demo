@@ -24,16 +24,37 @@ export const chartOption = (datas) => {
     series.push({
       name: item.name,
       type: 'line',
-      symbolSize: 5,
-      symbol: 'emptyCircle',
+      symbolSize: 6,
+      symbolKeepAspect:true,
+      // symbol: 'path://M250 150 L150 350 L350 350 Z', 
+      symbol: item.type,
       itemStyle: lineitemStyle,
       markPoint:{
         data:[{
           symbol:item.icon,
-          symbolSize:'50',
+          symbolSize:50,
           value:item.name,
           symbolOffset:[0,'-35%'],
-          symbolKeepAspect:true,
+          itemStyle:{
+            normal: {
+              // color: 各异，
+              // borderColor: 各异,     // 标注边线颜色，优先于color 
+              borderWidth: 20,            // 标注边线线宽，单位px，默认为1
+              label: {
+                  show: true,
+                  position: 'top' // 可选为'left'|'right'|'top'|'bottom'
+                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+              }
+            },
+            emphasis: {
+              // color: 各异
+              label: {
+                  show: true
+                  // position: 'inside'  // 'left'|'right'|'top'|'bottom'
+                  // textStyle: null     // 默认使用全局文本样式，详见TEXTSTYLE
+              }
+            }
+          },
           coord:[xPos,yAxis[0].length],
           label:{
               position: "top",
@@ -103,7 +124,7 @@ export const chartOption = (datas) => {
     color,
     tooltip: {
       show: true,
-      trigger: 'item'
+      trigger: 'axis'
     },
     grid: {
       left: '4%',

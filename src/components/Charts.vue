@@ -29,13 +29,22 @@ export default {
       let data = {
         data: [
           {
+            name: "自己",
+            type: "emptyrect",
+            icon:
+              "image://http://attachment.tpooo.com/forum/201406/17/165048czb6rract12t176i.jpg", //或者base64
+            value: [0, 80, 50, 20, 15, 65, 33, 75],
+          },
+          {
             name: "美国",
+            type: "emptyCircle",
             icon:
               "image://http://attachment.tpooo.com/forum/201406/17/165048czb6rract12t176i.jpg", //或者base64
             value: [40, 50, 30, 20, 15, 35, 43, 25],
           },
           {
             name: "德国",
+            type: "emptyCircle",
             icon:
               "image://https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=316329990,361704271&fm=26&gp=0.jpg", //或者base64
             value: [95, 30, 10, 56, 45, 35, 53, 85],
