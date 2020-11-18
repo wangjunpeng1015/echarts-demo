@@ -15,38 +15,38 @@ export default {
   props: {
     data: Object,
   },
-  data() {
+  data () {
     return {
       chartOptions: {},
     };
   },
-  mounted() {
+  mounted () {
     chart = echarts.init(this.$el);
     this.init();
   },
   methods: {
-    init() {
+    async init () {
       let data = {
         data: [
           {
             name: "自己",
-            type: "emptyrect",
+            symbol: "emptyRect",
             icon:
-              "image://http://attachment.tpooo.com/forum/201406/17/165048czb6rract12t176i.jpg", //或者base64
+              "https://iknow-pic.cdn.bcebos.com/32fa828ba61ea8d3ec8bdf94940a304e241f58f0", //或者base64
             value: [0, 80, 50, 20, 15, 65, 33, 75],
           },
           {
             name: "美国",
-            type: "emptyCircle",
+            symbol: "emptyCircle",
             icon:
-              "image://http://attachment.tpooo.com/forum/201406/17/165048czb6rract12t176i.jpg", //或者base64
+              "https://i-1-lanrentuku.qqxzb-img.com/2020/11/10/35d1e503-7436-4a09-b669-9e444c5c2df9.jpg?imageView2/2/w/1024/", //或者base64
             value: [40, 50, 30, 20, 15, 35, 43, 25],
           },
           {
             name: "德国",
-            type: "emptyCircle",
+            symbol: "emptyCircle",
             icon:
-              "image://https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=316329990,361704271&fm=26&gp=0.jpg", //或者base64
+              "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=316329990,361704271&fm=26&gp=0.jpg", //或者base64
             value: [95, 30, 10, 56, 45, 35, 53, 85],
           },
         ],
@@ -74,7 +74,7 @@ export default {
         ],
         maxValue: 100, //最大衡量
       };
-      const options = chartOption(data);
+      const options = await chartOption(data);
       chart.setOption(options);
     },
   },
@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .charts {
-  width: 100%;
-  height: 800px;
+  width: 800px;
+  height: 400px;
 }
 </style>

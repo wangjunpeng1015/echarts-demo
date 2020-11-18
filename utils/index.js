@@ -1,16 +1,18 @@
+//线条颜色
+const color = ['#024280', '#d2f8c8', '#ffbfc1', '#ffe3ba', '#ffd3ff', '#c1dbff']
+//
+export const chartOption = async (datas) => {
+  const { maxValue, yAxis, data } = JSON.parse(JSON.stringify(datas))
 
-const color = ['#024280','#d2f8c8','#ffbfc1','#ffe3ba','#ffd3ff','#c1dbff']
-export const chartOption = (datas) => {
-  const { maxValue, yAxis, data } = datas
+  await Promise.all(data.map((n, i) => borderPic(n, color[i])))
 
-  var lineitemStyle = {
+  const lineitemStyle = {
     normal: {
       label: {
         formatter: function (params) {
           return maxValue - params.value;
         },
         fontSize: 40,
-        // padding: [90, 0, 0, 0],
       },
       borderWidth: 10
     }
@@ -24,65 +26,65 @@ export const chartOption = (datas) => {
     series.push({
       name: item.name,
       type: 'line',
-      symbolSize: 6,
-      symbolKeepAspect:true,
-      // symbol: 'path://M250 150 L150 350 L350 350 Z', 
-      symbol: item.type,
+      symbolSize: 1,
+      symbol: item.symbol,
       itemStyle: lineitemStyle,
-      markPoint:{
-        data:[{
-          symbol:item.icon,
-          symbolSize:50,
-          value:item.name,
-          symbolOffset:[0,'-35%'],
-          itemStyle:{
+      markPoint: {
+        data: [{
+          symbol: item.icon,
+          // symbol: borderPic(item.icon, color[i]),
+          symbolSize: 50,
+          value: item.name,
+          symbolOffset: [0, '-35%'],
+          itemStyle: {
             normal: {
               // color: 各异，
               // borderColor: 各异,     // 标注边线颜色，优先于color 
               borderWidth: 20,            // 标注边线线宽，单位px，默认为1
               label: {
-                  show: true,
-                  position: 'top' // 可选为'left'|'right'|'top'|'bottom'
-                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+                show: true,
+                position: 'top' // 可选为'left'|'right'|'top'|'bottom'
+                // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
               }
             },
             emphasis: {
               // color: 各异
               label: {
-                  show: true
-                  // position: 'inside'  // 'left'|'right'|'top'|'bottom'
-                  // textStyle: null     // 默认使用全局文本样式，详见TEXTSTYLE
+                show: true
+                // position: 'inside'  // 'left'|'right'|'top'|'bottom'
+                // textStyle: null     // 默认使用全局文本样式，详见TEXTSTYLE
               }
             }
           },
-          coord:[xPos,yAxis[0].length],
-          label:{
-              position: "top",
-              fontSize:18,
-              color:'#000',
-              formatter(data){
-                  return data.value;
-              }
+          coord: [xPos, yAxis[0].length],
+          label: {
+            position: "top",
+            fontSize: 18,
+            color: '#000',
+            formatter (data) {
+              return data.value;
+            }
           },
         }],
       },
-      markLine:{
+      markLine: {
         symbol: 'none', //去掉箭头
-        label:{
-          show:false,
+        label: {
+          show: false,
         },
-        lineStyle:{
-          color:'#cacaca',
-          type:'solid'
+        lineStyle: {
+          color: '#cacaca',
+          type: 'solid'
         },
-        data: item.value.map((n,i)=>({
-            yAxis: i
+        data: item.value.map((n, i) => ({
+          yAxis: i
         }))
       },
       data: item.value.concat('_')
     }, {
       name: item.name,
       type: 'line',
+      symbolSize: 1,
       itemStyle: lineitemStyle,
       showAllSymbol: false,
       lineStyle: {
@@ -98,10 +100,10 @@ export const chartOption = (datas) => {
   const yAxisData = yAxis.map((item, i) => {
     return {
       type: 'category',
-      boundaryGap:true,
+      boundaryGap: true,
       axisTick: {
-        show:true,
-        alignWithLabel:true
+        show: true,
+        alignWithLabel: true
       },
       //两侧线条
       axisLine: {
@@ -110,12 +112,12 @@ export const chartOption = (datas) => {
         },
       },
       axisLabel: {
-        margin:28,
+        margin: 28,
         fontSize: 16,
         color: '#000'
       },
-      minorTick:{
-        show:true,
+      minorTick: {
+        show: true,
       },
       data: item.concat(['']),
     }
@@ -123,8 +125,8 @@ export const chartOption = (datas) => {
   let option = {
     color,
     tooltip: {
-      show: true,
-      trigger: 'axis'
+      show: false,
+      trigger: 'axis',
     },
     grid: {
       left: '4%',
@@ -139,7 +141,7 @@ export const chartOption = (datas) => {
         show: false,
       },
       axisLine: {
-        show:false,
+        show: false,
       },
       axisLabel: {
         show: false,
@@ -152,4 +154,30 @@ export const chartOption = (datas) => {
     series: series
   };
   return option
+}
+//给图片加边框base64（用背景色模拟边框）
+const borderPic = (data, color) => {
+  return new Promise((resolve, reject) => {
+    let img = new Image();
+    img.src = data.icon
+    img.setAttribute("crossOrigin", 'Anonymous')//避免部分bug
+    img.onload = () => {
+      const { width, height } = img
+      const canvas = document.createElement('canvas')
+      const border = 100
+      canvas.width = width + border//留边用
+      canvas.height = height + border//留边用
+      const ctx = canvas.getContext('2d')
+      //设置圆角边线
+      ctx.lineJoin = "round";
+      ctx.lineWidth = border;
+      ctx.strokeStyle = color;
+      ctx.strokeRect(border / 2, border / 2, width, height);
+      // 将图片画到canvas上面上去！
+      ctx.drawImage(img, border / 2, border / 2);
+      const url = canvas.toDataURL("image/png");
+      data.icon = `image://${url}`
+      resolve()
+    }
+  })
 }
