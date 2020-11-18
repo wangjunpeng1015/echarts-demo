@@ -28,6 +28,7 @@ export const chartOption = async (datas) => {
       type: 'line',
       symbolSize: 1,
       symbol: item.symbol,
+      z:6,
       itemStyle: lineitemStyle,
       markPoint: {
         data: [{
@@ -67,19 +68,7 @@ export const chartOption = async (datas) => {
           },
         }],
       },
-      markLine: {
-        symbol: 'none', //去掉箭头
-        label: {
-          show: false,
-        },
-        lineStyle: {
-          color: '#cacaca',
-          type: 'solid'
-        },
-        data: item.value.map((n, i) => ({
-          yAxis: i
-        }))
-      },
+     
       data: item.value.concat('_')
     }, {
       name: item.name,
@@ -87,14 +76,27 @@ export const chartOption = async (datas) => {
       symbolSize: 1,
       itemStyle: lineitemStyle,
       showAllSymbol: false,
+      markLine: {
+        silent: true,
+        symbol: 'none', //去掉箭头
+        label: {
+          show:false,
+        },
+        lineStyle: {
+          color: '#cacaca',
+          type: 'solid',
+        },
+        data: item.value.map((n, i) => ({
+          yAxis: i
+          // yAxis: i
+        }))
+      },
       lineStyle: {
         normal: {
           type: 'dotted'
         }
       },
-      data: (() => {
-        return new Array(num).fill('_').concat([item.value[num], xPos])
-      })()
+      data:new Array(num).fill('_').concat([item.value[num], xPos])
     })
   })
   const yAxisData = yAxis.map((item, i) => {

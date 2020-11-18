@@ -15,17 +15,17 @@ export default {
   props: {
     data: Object,
   },
-  data () {
+  data() {
     return {
       chartOptions: {},
     };
   },
-  mounted () {
+  mounted() {
     chart = echarts.init(this.$el);
     this.init();
   },
   methods: {
-    async init () {
+    async init() {
       let data = {
         data: [
           {
@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .charts {
-  width: 800px;
-  height: 400px;
+  width: 100%;
+  height: 800px;
 }
 </style>
