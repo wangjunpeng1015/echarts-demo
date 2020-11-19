@@ -15,17 +15,17 @@ export default {
   props: {
     data: Object,
   },
-  data() {
+  data () {
     return {
       chartOptions: {},
     };
   },
-  mounted() {
+  mounted () {
     chart = echarts.init(this.$el);
     this.init();
   },
   methods: {
-    async init() {
+    async init () {
       let data = {
         data: [
           {
@@ -33,7 +33,7 @@ export default {
             symbol: "emptyRect",
             icon:
               "https://iknow-pic.cdn.bcebos.com/32fa828ba61ea8d3ec8bdf94940a304e241f58f0", //或者base64
-            value: [0, 80, 50, 20, 15, 65, 33, 75],
+            value: [-50, 80, 50, 20, 15, 65, 33, 75],
           },
           {
             name: "美国",
@@ -72,7 +72,7 @@ export default {
             "弹性时间观",
           ],
         ],
-        maxValue: 100, //最大衡量
+        maxValue: 20, //最大衡量
       };
       const options = await chartOption(data);
       chart.setOption(options);

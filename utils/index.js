@@ -28,7 +28,7 @@ export const chartOption = async (datas) => {
       type: 'line',
       symbolSize: 1,
       symbol: item.symbol,
-      z:6,
+      z: 6,
       itemStyle: lineitemStyle,
       markPoint: {
         data: [{
@@ -68,7 +68,7 @@ export const chartOption = async (datas) => {
           },
         }],
       },
-     
+
       data: item.value.concat('_')
     }, {
       name: item.name,
@@ -80,7 +80,7 @@ export const chartOption = async (datas) => {
         silent: true,
         symbol: 'none', //去掉箭头
         label: {
-          show:false,
+          show: false,
         },
         lineStyle: {
           color: '#cacaca',
@@ -96,7 +96,7 @@ export const chartOption = async (datas) => {
           type: 'dotted'
         }
       },
-      data:new Array(num).fill('_').concat([item.value[num], xPos])
+      data: new Array(num).fill('_').concat([item.value[num], xPos])
     })
   })
   const yAxisData = yAxis.map((item, i) => {
@@ -109,6 +109,7 @@ export const chartOption = async (datas) => {
       },
       //两侧线条
       axisLine: {
+        onZero: false,
         lineStyle: {
           color: '#cacaca'
         },
@@ -118,9 +119,9 @@ export const chartOption = async (datas) => {
         fontSize: 16,
         color: '#000'
       },
-      minorTick: {
-        show: true,
-      },
+      // minorTick: {
+      //   show: true,
+      // },
       data: item.concat(['']),
     }
   })
@@ -139,6 +140,8 @@ export const chartOption = async (datas) => {
     },
     xAxis: {
       type: 'value',
+      min: -100,
+      max: 100,
       axisTick: {
         show: false,
       },
